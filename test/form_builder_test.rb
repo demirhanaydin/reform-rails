@@ -59,6 +59,18 @@ class FormBuilderCompatTest < BaseTest
     form.band.label.location.postcode.must_equal 2481
   end
 
+  it "respects _attributes params array" do
+    form.validate(
+      "artist_attributes" => {"name" => "Blink 182"},
+      "songs_attributes"  => [{"title" => "Damnit"}],
+      "band_attributes"   => {"label_attributes" => {"name" => "Epitaph", "location_attributes" => {"postcode" => 2481}}})
+
+    form.artist.name.must_equal "Blink 182"
+    form.songs.first.title.must_equal "Damnit"
+    form.band.label.name.must_equal "Epitaph"
+    form.band.label.location.postcode.must_equal 2481
+  end
+
   it "allows nested collection and property to be missing" do
     form.validate({})
 
